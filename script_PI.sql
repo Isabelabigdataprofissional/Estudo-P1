@@ -1,5 +1,23 @@
 --ex3 Declare um cursor  com parâmetros com USING, que receba um estado (hub_state) como parâmetro, e exiba todos os hubs desse estado. 
-
+ DO $$
+ DECLARE 
+ v_estado varchar(10) = 'SP';
+ v_nome VARCHAR;
+ tupla RECORD;
+ cur_hubs_estado CURSOR (nome VARCHAR (100), estado VARCHAR(10) )
+ 					FOR SELECT hub_nome FROM hubs
+					 WHERE hub_estado = v_estado;
+BEGIN 
+OPEN cur_hubs_estado (v_nome, v_estado);
+ 
+LOOP
+FETCH cur_hubs_estado INTO tupla;
+EXIT WHEN NOT FOUND;
+ RAISE NOTICE '%', tupla;
+END LOOP;
+ 
+CLOSE cur_hubs_estado;
+END; $$
 
 -- --ex2 selecione a hub_state do hub com hub_id = 2, e use CASE para exibir: "Sul" se o estado for RS "Sudeste" se for SP "Outro" para qualquer outro
 -- do $$
